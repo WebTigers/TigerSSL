@@ -1,10 +1,10 @@
 # TigerSSL — store & marketing art
 
-Drop the module's directory/marketplace art here (referenced from `module.json` → `media`):
+Directory/marketplace art (referenced from the Vendor Registry listing + `module.json` → `media`):
 
-- `icon-256.png` — 256×256 module icon (a padlock mark).
-- `banner-1544x500.png` — directory/marketplace banner.
-- `screenshot-1.png` — the SSL certificates admin screen.
+- **`logo.jpg`** — 500×500 square logo (the shared Tiger module mark). **Present.**
+- `hero.jpg` — ~1280×720 wide banner for the directory card. *(TODO — per-module custom art.)*
+- `screenshot-01.jpg` … — 1280×720 gallery shots of the SSL admin screen. *(TODO.)*
 
-Until real art lands, the Module Manager falls back to a generic icon. Keep source files (SVG/PSD) out of
-the distributed release if they're heavy; the release only needs the exported PNGs listed above.
+Media lives here (not `assets/` — that's runtime files the module serves). The registry only points at
+these; raw serves them from the repo. Keep source files (SVG/PSD) out of the release if heavy.

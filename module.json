@@ -22,9 +22,7 @@
   },
 
   "media": {
-    "icon":        "media/icon-256.png",
-    "banner":      "media/banner-1544x500.png",
-    "screenshots": ["media/screenshot-1.png"]
+    "icon": "media/logo.jpg"
   },
 
   "pricing": { "model": "free" },
