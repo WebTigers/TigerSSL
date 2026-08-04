@@ -1,0 +1,33 @@
+{
+  "schema": "tiger.module/v1",
+  "slug": "tigerssl",
+  "name": "TigerSSL",
+  "version": "0.1.0-beta",
+  "description": "Free, automatic HTTPS for your Tiger server — Let's Encrypt / ACME certificate issuance and renewal, driven from the admin. Pure-PHP ACME v2 client, HTTP-01 challenge served natively (zero web-server config), auto-renewal via TigerSchedule. For servers you own (VPS / EC2 / TigerCloud); stands down cleanly on hosts that already manage SSL (cPanel AutoSSL).",
+  "author": { "name": "WebTigers", "url": "https://webtigers.com" },
+  "homepage": "https://webtigers.com/tigerssl",
+  "repository": "https://github.com/WebTigers/TigerSSL",
+  "license": "BSD-3-Clause",
+  "keywords": ["ssl", "tls", "https", "lets-encrypt", "acme", "certbot", "certificate", "easyssl", "security"],
+
+  "requires": { "tiger": ">=0.8.0-beta", "php": ">=8.1" },
+  "suggests": { "tigerschedule": "auto-renewal without a system cron" },
+
+  "namespace": "Tigerssl",
+  "provides": {
+    "acl":        "configs/acl.ini",
+    "routes":     "configs/routes.ini",
+    "migrations": "migrations",
+    "assets":     "assets"
+  },
+
+  "media": {
+    "icon":        "media/icon-256.png",
+    "banner":      "media/banner-1544x500.png",
+    "screenshots": ["media/screenshot-1.png"]
+  },
+
+  "pricing": { "model": "free" },
+
+  "_notes": "Free, BSD-3-Clause first-party module. Issuance is pure PHP (vendored ACME v2 client in vendor-lib/); the HTTP-01 challenge is served by a native controller route (no .htaccess, no vhost edit). The one genuinely privileged step — writing the cert where the web server reads it + reloading it — needs root, so TigerSSL targets servers you OWN and ships a narrow, sudo-gated reload helper; it detects host-managed SSL (cPanel AutoSSL) and stands down. See FEATURES.md."
+}

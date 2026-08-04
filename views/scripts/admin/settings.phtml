@@ -1,0 +1,76 @@
+<?php /* SPDX-License-Identifier: BSD-3-Clause — TigerSSL settings screen (ADMIN.md skeleton). */ ?>
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h1 class="h3 mb-1"><i class="fa-solid fa-gear me-2"></i>SSL Settings</h1>
+        <p class="text-body-secondary mb-0">Which certificate authority to use, how certificates are installed, and when they renew.</p>
+    </div>
+    <div class="text-nowrap">
+        <a href="/tigerssl/admin/index" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-left me-2"></i>Back</a>
+        <button type="button" id="tigerssl-settings-save" class="btn btn-primary"><i class="fa-solid fa-floppy-disk me-2"></i>Save</button>
+    </div>
+</div>
+
+<div id="tigerssl-settings-feedback"></div>
+
+<form id="tigerssl-settings-form" onsubmit="return false;" novalidate>
+    <?= $this->form->getElement('_csrf') ?>
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header fw-semibold"><i class="fa-solid fa-building-shield me-2"></i>Certificate authority</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Environment</label>
+                        <?= $this->form->getElement('ca_environment') ?>
+                        <div class="form-text">Start on <strong>Staging</strong> to test — it has generous limits. Switch to Production once a staging issue succeeds.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Contact email</label>
+                        <?= $this->form->getElement('ca_contact_email') ?>
+                        <div class="form-text">Let's Encrypt uses this only for expiry notices.</div>
+                    </div>
+                    <div class="mb-1">
+                        <label class="form-label">Key type</label>
+                        <?= $this->form->getElement('key_type') ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header fw-semibold"><i class="fa-solid fa-server me-2"></i>Installation & renewal</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Install strategy</label>
+                        <?= $this->form->getElement('install_strategy') ?>
+                        <div class="form-text"><strong>Sudo-hook</strong> needs one allow-listed reload command (below). <strong>Stand down</strong> if your host (cPanel) manages SSL.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Install path</label>
+                        <?= $this->form->getElement('install_path') ?>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Reload command <span class="text-body-secondary">(sudo-hook only)</span></label>
+                        <?= $this->form->getElement('reload_command') ?>
+                        <div class="form-text">Must match a single <code>NOPASSWD</code> entry in your sudoers — nothing else is run.</div>
+                    </div>
+                    <div class="row g-2 align-items-end">
+                        <div class="col">
+                            <label class="form-label">Renew before (days)</label>
+                            <?= $this->form->getElement('renew_before_days') ?>
+                        </div>
+                        <div class="col-auto">
+                            <div class="form-check mb-2">
+                                <?= $this->form->getElement('renew_auto') ?>
+                                <label class="form-check-label">Auto-renew</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script src="<?= $this->escape($this->asset('/_modules/tigerssl/js/tigerssl-settings.js')) ?>" defer></script>

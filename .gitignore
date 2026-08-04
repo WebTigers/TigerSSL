@@ -1,0 +1,17 @@
+# IDE
+.idea/
+*.iml
+
+# Runtime challenge tokens + issuance locks (ephemeral)
+storage/cache/tigerssl/*
+!storage/cache/tigerssl/.gitkeep
+
+# Issued certs / keys must never be committed
+*.pem
+*.key
+*.crt
+*.csr
+certs/
+
+# OS
+.DS_Store

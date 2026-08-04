@@ -1,0 +1,85 @@
+<?php /* SPDX-License-Identifier: BSD-3-Clause — TigerSSL certificates screen (ADMIN.md skeleton). */ ?>
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h1 class="h3 mb-1"><i class="fa-solid fa-lock me-2"></i>SSL Certificates</h1>
+        <p class="text-body-secondary mb-0">Free, automatic HTTPS for your server — issued and renewed for you.</p>
+    </div>
+    <div class="text-nowrap">
+        <a href="/tigerssl/admin/settings" class="btn btn-outline-secondary"><i class="fa-solid fa-gear me-2"></i>Settings</a>
+        <button type="button" id="tigerssl-add-btn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tigerssl-add-modal">
+            <i class="fa-solid fa-plus me-2"></i>Add a domain
+        </button>
+    </div>
+</div>
+
+<?php $s = $this->status; ?>
+<?php if (!empty($s['stands_down'])): ?>
+    <div class="alert alert-info d-flex align-items-center" role="alert">
+        <i class="fa-solid fa-circle-info me-2"></i>
+        <div>This host manages SSL for you (e.g. cPanel AutoSSL). <strong>TigerSSL is standing down</strong> —
+            your certificates are already handled by the host.</div>
+    </div>
+<?php else: ?>
+    <div class="alert alert-<?= empty($s['acme_ready']) ? 'warning' : 'success' ?> d-flex align-items-center" role="alert">
+        <i class="fa-solid fa-server me-2"></i>
+        <div>
+            You own this server — TigerSSL will issue certificates (<strong><?= $this->escape($s['ca']) ?></strong> CA)
+            using the <strong><?= $this->escape($s['strategy']) ?></strong> strategy.
+            <?php if (empty($s['acme_ready'])): ?>
+                <span class="text-warning-emphasis">The ACME engine isn't installed yet — issuance is pending (see docs).</span>
+            <?php endif; ?>
+            <?php if (empty($s['openssl'])): ?>
+                <span class="text-danger">PHP's <code>openssl</code> extension is required.</span>
+            <?php endif; ?>
+        </div>
+    </div>
+<?php endif; ?>
+
+<div id="tigerssl-feedback"></div>
+
+<div class="card">
+    <div class="card-header fw-semibold"><i class="fa-solid fa-certificate me-2"></i>Managed certificates</div>
+    <div class="card-body">
+        <table id="tigerssl-certs" class="table table-hover align-middle w-100">
+            <thead>
+                <tr>
+                    <th>Domain</th><th>Status</th><th>Expires</th><th>Auto-renew</th><th>Installer</th><th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Add-domain modal -->
+<div class="modal fade" id="tigerssl-add-modal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="tigerssl-add-form" onsubmit="return false;" novalidate>
+        <div class="modal-header">
+          <h5 class="modal-title">Add a domain</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <?= $this->form->getElement('_csrf') ?>
+          <div class="mb-3">
+            <label class="form-label">Domain</label>
+            <?= $this->form->getElement('domain') ?>
+            <div class="form-text">The site you want a certificate for, e.g. <code>shop.example.com</code>.</div>
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Additional domains <span class="text-body-secondary">(optional)</span></label>
+            <?= $this->form->getElement('sans') ?>
+            <div class="form-text">Extra names on the same certificate, comma or space separated.</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" id="tigerssl-issue-btn" class="btn btn-primary"><i class="fa-solid fa-bolt me-2"></i>Issue certificate</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="<?= $this->escape($this->asset('/_modules/tigerssl/js/tigerssl-admin.js')) ?>" defer></script>
