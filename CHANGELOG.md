@@ -3,6 +3,21 @@
 All notable changes to TigerSSL are recorded here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); versioning is SemVer with a `-beta` stability suffix.
 
+## [1.0.0] — 2026-08-24
+
+**1.0** — the module line follows Tiger 1.0.
+
+### Changed
+- Version is now `1.0.0` (was `0.1.0-beta`).
+- Ships the full six-locale UI (en/es/pt/hi/de/fr).
+
+### Status — read before relying on automatic issuance
+The ACME client, the certificate store, the admin screen, the HTTP-01 `.well-known` route and the
+renewal job are built. **Live end-to-end issuance against Let's Encrypt has not been proven on a real
+domain yet**, the privileged install/reload hook is still being wired, and **DNS-01 (and therefore
+wildcard certificates) is roadmap**. Point Settings at Let's Encrypt **staging** first — the defaults
+do, deliberately, because production has real rate limits.
+
 ## [0.1.0-beta] — unreleased
 
 ### Added
