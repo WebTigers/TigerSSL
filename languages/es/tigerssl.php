@@ -24,4 +24,8 @@ return [
     'tigerssl.error.not_found'     => 'No se encontró ningún certificado gestionado para ese dominio.',
     'tigerssl.error.issue_failed'  => 'La emisión del certificado falló. Comprueba que el dominio apunte a este servidor y prueba primero con staging.',
     'tigerssl.error.renew_failed'  => 'La renovación del certificado falló. El certificado existente sigue funcionando hasta su vencimiento.',
+
+    // The marketplace listing blurb. Pulled into the public directory by TigerVendors at the
+    // pinned ref, so this file stays the one place this module's copy is translated.
+    'tigerssl.listing.description'           => 'HTTPS gratuito y automático para tu servidor Tiger: emisión y renovación de certificados Let\'s Encrypt / ACME desde el panel. PHP puro (sin certbot ni Python), HTTP-01 servido de forma nativa, renovación automática. Para servidores propios; se desactiva cuando el alojamiento gestiona el SSL (cPanel AutoSSL).',
 ];

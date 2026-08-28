@@ -24,4 +24,8 @@ return [
     'tigerssl.error.not_found'     => 'Für diese Domain wurde kein verwaltetes Zertifikat gefunden.',
     'tigerssl.error.issue_failed'  => 'Die Ausstellung des Zertifikats ist fehlgeschlagen. Prüfen Sie, ob die Domain auf diesen Server zeigt, und testen Sie zuerst mit Staging.',
     'tigerssl.error.renew_failed'  => 'Die Erneuerung des Zertifikats ist fehlgeschlagen. Das bestehende Zertifikat bleibt bis zu seinem Ablauf gültig.',
+
+    // The marketplace listing blurb. Pulled into the public directory by TigerVendors at the
+    // pinned ref, so this file stays the one place this module's copy is translated.
+    'tigerssl.listing.description'           => 'Kostenloses, automatisches HTTPS für Ihren Tiger-Server — Ausstellung und Erneuerung von Let\'s-Encrypt-/ACME-Zertifikaten direkt aus der Verwaltung. Reines PHP (kein certbot/Python), HTTP-01 nativ ausgeliefert, erneuert sich automatisch. Für eigene Server; tritt zurück, wo der Hoster das SSL verwaltet (cPanel AutoSSL).',
 ];

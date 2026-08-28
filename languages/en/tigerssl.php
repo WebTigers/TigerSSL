@@ -24,4 +24,8 @@ return [
     'tigerssl.error.not_found'     => 'No managed certificate found for that domain.',
     'tigerssl.error.issue_failed'  => 'Certificate issuance failed. Check the domain points at this server and try staging first.',
     'tigerssl.error.renew_failed'  => 'Certificate renewal failed. The existing certificate keeps serving until its expiry.',
+
+    // The marketplace listing blurb. Pulled into the public directory by TigerVendors at the
+    // pinned ref, so this file stays the one place this module's copy is translated.
+    'tigerssl.listing.description'           => 'Free, automatic HTTPS for your Tiger server — Let\'s Encrypt / ACME certificate issuance + renewal from the admin. Pure-PHP (no certbot/Python), HTTP-01 served natively, auto-renews. For servers you own; stands down where the host manages SSL (cPanel AutoSSL).',
 ];
