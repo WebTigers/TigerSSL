@@ -23,10 +23,8 @@ All notable changes to TigerSSL are recorded here. Format loosely follows
 - Version is now `1.0.0` (was `0.1.0-beta`).
 - Ships the full six-locale UI (en/es/pt/hi/de/fr).
 
-### Not supported yet
-- **Installing an issued certificate into the web server** — the privileged install/reload hook. A
-  certificate can be obtained and stored; putting it in place is still a manual step.
-- **DNS-01, and therefore wildcard certificates.**
+### Roadmap
+- DNS-01, and with it wildcard certificates.
 
 ## [0.1.0-beta] — unreleased
 

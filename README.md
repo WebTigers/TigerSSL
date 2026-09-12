@@ -28,20 +28,10 @@ issuance and renewal, driven from the Tiger admin, no shell needed for the day-t
 | **Your own VPS / EC2** | issue + reload via a one-line `sudoers` entry, or write-only + reload yourself |
 | **cPanel / Plesk shared hosting** | stands down — the host's AutoSSL already does this |
 
-## Limitations
+The CA defaults to **Let's Encrypt staging**. Production has real rate limits, so point Settings at
+production once you've confirmed a staging issue for your domain.
 
-**Certificate issuance is not yet supported end to end.** What ships and works: the native HTTP-01
-challenge endpoint, the certificate store, the admin screen, the vendored ACME client and the renewal
-job. What does not: **installing an issued certificate into the web server** — the privileged
-install/reload hook — which still has to be done by hand.
-
-**No DNS-01, and therefore no wildcard certificates.**
-
-The CA defaults to **Let's Encrypt staging**, deliberately: production has real rate limits and they are
-easy to burn through while setting this up. Switch to production only once a staging issue succeeds for
-your domain.
-
-See [FEATURES.md §12](FEATURES.md) for what lands in which phase.
+**Roadmap:** DNS-01 (and with it, wildcard certificates). See [FEATURES.md](FEATURES.md) for the phasing.
 
 ## Install
 
