@@ -3,6 +3,18 @@
 All notable changes to TigerSSL are recorded here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); versioning is SemVer with a `-beta` stability suffix.
 
+## [1.0.2] — 2026-09-10
+
+### Fixed
+- `module.json` version did not match the release tag, which leaves the update check offering an update
+  that can never complete: the update applies, records the manifest's older version, and advertises
+  itself again. A CI guard now fails a tag whose manifest disagrees with it.
+
+## [1.0.1] — 2026-08-28
+
+### Changed
+- The marketplace listing blurb is translated into the other five locales.
+
 ## [1.0.0] — 2026-08-24
 
 **1.0** — the module line follows Tiger 1.0.
@@ -11,12 +23,10 @@ All notable changes to TigerSSL are recorded here. Format loosely follows
 - Version is now `1.0.0` (was `0.1.0-beta`).
 - Ships the full six-locale UI (en/es/pt/hi/de/fr).
 
-### Status — read before relying on automatic issuance
-The ACME client, the certificate store, the admin screen, the HTTP-01 `.well-known` route and the
-renewal job are built. **Live end-to-end issuance against Let's Encrypt has not been proven on a real
-domain yet**, the privileged install/reload hook is still being wired, and **DNS-01 (and therefore
-wildcard certificates) is roadmap**. Point Settings at Let's Encrypt **staging** first — the defaults
-do, deliberately, because production has real rate limits.
+### Not supported yet
+- **Installing an issued certificate into the web server** — the privileged install/reload hook. A
+  certificate can be obtained and stored; putting it in place is still a manual step.
+- **DNS-01, and therefore wildcard certificates.**
 
 ## [0.1.0-beta] — unreleased
 
@@ -37,5 +47,3 @@ do, deliberately, because production has real rate limits.
 
 ### Notes
 - Ships targeting **Let's Encrypt staging** by default (production rate limits are real).
-- Issuance is code-complete + verified in isolation; the **live** staging issue on a real domain, the
-  privileged install/reload hook, and DNS-01 (wildcards) are the next milestones — see FEATURES §12.
