@@ -3,6 +3,11 @@
 All notable changes to TigerSSL are recorded here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); versioning is SemVer with a `-beta` stability suffix.
 
+## [1.0.3] — 2026-09-13
+
+### Changed
+- README, CHANGELOG and release notes describe limitations as capability rather than build progress; the work items are tracked in Jira (TIGER-108/109/110). Two missing changelog entries backfilled.
+
 ## [1.0.2] — 2026-09-10
 
 ### Fixed
