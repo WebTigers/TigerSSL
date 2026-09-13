@@ -2,7 +2,7 @@
   "schema": "tiger.module/v1",
   "slug": "tigerssl",
   "name": "TigerSSL",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Free, automatic HTTPS for your Tiger server — Let's Encrypt / ACME certificate issuance and renewal, driven from the admin. Pure-PHP ACME v2 client, HTTP-01 challenge served natively (zero web-server config), auto-renewal via TigerSchedule. For servers you own (VPS / EC2 / TigerCloud); stands down cleanly on hosts that already manage SSL (cPanel AutoSSL).",
   "author": { "name": "WebTigers", "url": "https://webtigers.com" },
   "homepage": "https://webtigers.com/tigerssl",
