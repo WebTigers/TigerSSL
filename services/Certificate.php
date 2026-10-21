@@ -28,7 +28,7 @@ class Tigerssl_Service_Certificate extends Tiger_Service_Service
      */
     public function issue(array $params): void
     {
-        if (!$this->_isAdmin()) { $this->_error('core.api.error.not_allowed'); return; }
+        if (!$this->_isAllowed('issue')) { $this->_error('core.api.error.not_allowed'); return; }
 
         $form = new Tigerssl_Form_Domain();
         if (!$form->isValid($params)) { $this->_formErrors($form); return; }
@@ -95,7 +95,7 @@ class Tigerssl_Service_Certificate extends Tiger_Service_Service
      */
     public function renew(array $params): void
     {
-        if (!$this->_isAdmin()) { $this->_error('core.api.error.not_allowed'); return; }
+        if (!$this->_isAllowed('renew')) { $this->_error('core.api.error.not_allowed'); return; }
         $domain = strtolower(trim((string) ($params['domain'] ?? '')));
         $model  = new Tigerssl_Model_Certificate();
         $row    = $domain !== '' ? $model->findByDomain($domain) : null;
@@ -170,7 +170,7 @@ class Tigerssl_Service_Certificate extends Tiger_Service_Service
      */
     public function remove(array $params): void
     {
-        if (!$this->_isAdmin()) { $this->_error('core.api.error.not_allowed'); return; }
+        if (!$this->_isAllowed('remove')) { $this->_error('core.api.error.not_allowed'); return; }
         $id    = (string) ($params['certificate_id'] ?? '');
         $model = new Tigerssl_Model_Certificate();
         if ($id === '') { $this->_error('tigerssl.error.not_found'); return; }
@@ -190,7 +190,7 @@ class Tigerssl_Service_Certificate extends Tiger_Service_Service
      */
     public function datatable(array $params): void
     {
-        if (!$this->_isAdmin()) { $this->_error('core.api.error.not_allowed'); return; }
+        if (!$this->_isAllowed('datatable')) { $this->_error('core.api.error.not_allowed'); return; }
         $dt    = $this->_dtParams($params);
         $model = new Tigerssl_Model_Certificate();
         $rows  = $model->fetchAll($model->activeSelect()->order('created_at DESC'))->toArray();
@@ -220,7 +220,7 @@ class Tigerssl_Service_Certificate extends Tiger_Service_Service
      */
     public function status(array $params = []): void
     {
-        if (!$this->_isAdmin()) { $this->_error('core.api.error.not_allowed'); return; }
+        if (!$this->_isAllowed('status')) { $this->_error('core.api.error.not_allowed'); return; }
         $this->_success($this->_statusForView());
     }
 

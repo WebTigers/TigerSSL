@@ -13,7 +13,7 @@ class Tigerssl_Service_Settings extends Tiger_Service_Service
     /** Persist the settings form. */
     public function save(array $params): void
     {
-        if (!$this->_isAdmin()) { $this->_error('core.api.error.not_allowed'); return; }
+        if (!$this->_isAllowed('save')) { $this->_error('core.api.error.not_allowed'); return; }
 
         $form = new Tigerssl_Form_Settings();
         if (!$form->isValid($params)) { $this->_formErrors($form); return; }
