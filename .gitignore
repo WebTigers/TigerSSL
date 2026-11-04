@@ -15,3 +15,8 @@ certs/
 
 # OS
 .DS_Store
+
+# PHPUnit
+/vendor/
+/.phpunit.cache/
+.phpunit.result.cache
