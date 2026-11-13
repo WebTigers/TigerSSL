@@ -1,7 +1,12 @@
 # Changelog
 
 All notable changes to TigerSSL are recorded here. Format loosely follows
-[Keep a Changelog](https://keepachangelog.com/); versioning is SemVer with a `-beta` stability suffix.
+[Keep a Changelog](https://keepachangelog.com/); versioning is SemVer.
+
+## [1.0.6] — 2026-11-13
+
+### Changed
+- Requires Tiger >= 1.0.0 (was `>=0.8.0-beta`); dropped the leftover "beta" status wording from FEATURES.md and this changelog's header.
 
 ## [1.0.4] — 2026-09-13
 

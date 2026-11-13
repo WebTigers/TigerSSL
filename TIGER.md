@@ -35,7 +35,7 @@ your first run can't hit production rate limits; flip to production once a stagi
 
 ## Requirements
 
-- Tiger ≥ 0.8.0-beta, PHP ≥ 8.1 with the `openssl` + `curl` extensions (see [`module.json`](module.json)).
+- Tiger ≥ 1.0.0, PHP ≥ 8.1 with the `openssl` + `curl` extensions (see [`module.json`](module.json)).
 - A server where you control the web server (for install + reload), or a host whose SSL you let TigerSSL
   leave alone.
 

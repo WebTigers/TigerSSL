@@ -6,11 +6,10 @@ it records the decisions and their *why* so we don't relitigate them. For the pi
 [README.md](README.md); for the module manifest see [module.json](module.json); for how to work in the
 repo see [AGENTS.md](AGENTS.md).
 
-> **Status: early beta.** The module structure, the native HTTP-01 challenge endpoint, the certificate
-> store, the admin surface, and the renewal job are built. The ACME wire protocol runs through a
-> **vendored pure-PHP ACME v2 client** (`vendor-lib/ACMECert`, `skoerfgen/ACMECert` v3.7.2, see §7) and
-> **issuance is wired to it** (`_issueViaAcme()`) — what remains is the live end-to-end test against
-> Let's Encrypt staging on a real domain, the privileged install/reload hook (§5), and DNS-01 (§4).
+> **Status: 1.x.** The native HTTP-01 challenge endpoint, the certificate store, the admin surface, and the
+> renewal job, with issuance through a **vendored pure-PHP ACME v2 client** (`vendor-lib/ACMECert`,
+> `skoerfgen/ACMECert` v3.7.2, see §7). Installing a certificate into the web server is the one privileged
+> step (§5); DNS-01 (wildcards) is not supported (§4).
 
 ---
 
