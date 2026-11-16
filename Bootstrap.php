@@ -43,11 +43,16 @@ class Tigerssl_Bootstrap extends Zend_Application_Module_Bootstrap
             $ssl = $cfg ? $cfg->get('tiger')?->get('tigerssl') : null;
             if ($ssl && (string) $ssl->get('enabled') === '1'
                 && (string) $ssl->get('renew')?->get('schedule_enabled') === '1') {
+                // `run` + `every` are Tiger_Schedule's keys (a job with no `run` is silently dropped —
+                // which is what 1.0.x's `handler`/`interval` did). The job renews EVERY org's due
+                // certificates, each as its own org (Tigerssl_Service_Certificate::_renewAllDue); it is
+                // not the /api renewDue, which an admin runs for their own org only.
                 Tiger_Schedule::register([
-                    'key'      => 'tigerssl.renew',
-                    'label'    => 'TigerSSL — renew due certificates',
-                    'interval' => 'daily',
-                    'handler'  => ['Tigerssl_Service_Certificate', 'renewDue'],
+                    'key'   => 'tigerssl.renew',
+                    'label' => 'TigerSSL — renew due certificates',
+                    'every' => Tiger_Schedule::DAILY,
+                    'at'    => '03:30',
+                    'run'   => static function () { (new Tigerssl_Service_Certificate())->_renewAllDue(); },
                 ]);
             }
         } catch (Throwable $e) {

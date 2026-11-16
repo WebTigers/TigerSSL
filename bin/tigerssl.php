@@ -28,8 +28,8 @@ $svc   = new Tigerssl_Service_Certificate();
 
 switch ($cmd) {
     case 'renew-due':
-        $svc->renewDue([]);
-        echo _envelope($svc);
+        // The system job: every org's due certificates, each renewed as its own org.
+        echo json_encode($svc->_renewAllDue(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n";
         break;
 
     case 'renew':

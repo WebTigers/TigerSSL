@@ -34,6 +34,14 @@ See [`README.md`](README.md) for the pitch, [`module.json`](module.json) for the
   `0600` outside the docroot (account key may use the secrets tier). No key columns in the DB.
 - **Default to Let's Encrypt STAGING.** First issuance runs against staging (LE production has real rate
   limits). Flipping to production is a deliberate Settings choice.
+- **Certificates are per org; stay in the caller's org lane** (TIGER-511, FEATURES §8a). Every admin
+  method acts for `_orgId()` only, through the org-scoped finders/writers on `Tigerssl_Model_Certificate`
+  (`findForOrg`, `forOrg`, `updateForOrg`, `softDeleteForOrg`) — never an org-less lookup before a write.
+  An org may only certify names it owns (`Tigerssl_Model_HostOwner`). The only install-wide path is the
+  scheduled `_renewAllDue`, which renews each certificate as its own org — never mix orgs' names.
+- **Install-level settings are global and install-org-only** (CA, ACME contact, key type, renewal window,
+  installer, the sudo reload command); `_cfg()` reads them from the global tier + ini, never an org row.
+  Org-level choices (`renew.auto`) are written at the caller's org.
 - **No certbot, no Python, no third-party network beyond the ACME CA.** The ACME engine is the vendored
   pure-PHP client in `vendor-lib/` (FEATURES §7). Keep the footprint tiny and pure-PHP.
 
@@ -77,9 +85,12 @@ controllers/
 services/
   Certificate.php            /api: issue | renew | renewDue | remove | datatable | status — drives the ACME client
   Settings.php               /api: save settings to the config tier
-models/Certificate.php       the cert store (UUID PK, $_primary, standard columns)
-forms/                       Domain (add), Settings
-migrations/                  timestamp-versioned schema (tigerssl_certificate)
+models/Certificate.php       the cert store (UUID PK, $_primary, standard columns) — org-scoped finders/writers
+models/CertificateName.php   the names a cert covers (SAN list; primary flagged)
+models/HostOwner.php         which org owns a hostname (site_domain map; unmapped → install org)
+forms/                       Domain (add), Certificate (renew/remove — shares Domain's CSRF salt), Settings
+migrations/                  timestamp-versioned schema (tigerssl_certificate, tigerssl_certificate_name)
+tests/                       Unit (no DB) + Integration (MariaDB; self-skips without TIGER_TEST_DB_NAME)
 configs/  acl.ini  routes.ini (the .well-known route)  module.ini (defaults)
 views/scripts/admin/         index (certs) + settings screens
 languages/en/                semantic tigerssl.* keys

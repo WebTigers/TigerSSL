@@ -24,6 +24,17 @@ return [
     'tigerssl.error.not_found'     => 'Nenhum certificado gerenciado encontrado para esse domínio.',
     'tigerssl.error.issue_failed'  => 'A emissão do certificado falhou. Verifique se o domínio aponta para este servidor e teste primeiro no staging.',
     'tigerssl.error.renew_failed'  => 'A renovação do certificado falhou. O certificado existente continua funcionando até expirar.',
+    'tigerssl.error.no_org'           => 'Sua conta não pertence a nenhuma organização, portanto não tem certificados para gerenciar.',
+    'tigerssl.error.name_not_owned'   => 'Esse domínio não pertence à sua organização. Adicione-o primeiro aos seus sites.',
+    'tigerssl.error.name_taken'       => 'Esse domínio já está em outro certificado gerenciado.',
+    'tigerssl.error.san_invalid'      => 'Cada domínio adicional deve ser um nome de host válido.',
+    'tigerssl.error.too_many_names'   => 'Um certificado pode cobrir no máximo 100 domínios.',
+    'tigerssl.error.install_settings' => 'Somente a organização proprietária do site pode alterar as configurações SSL do servidor.',
+
+    // admin JS (delivered via the view's i18n carrier)
+    'tigerssl.js.remove_title'   => 'Remover certificado',
+    'tigerssl.js.remove_body'    => 'Remover este certificado do gerenciamento? Os arquivos em disco são mantidos.',
+    'tigerssl.js.remove_confirm' => 'Remover',
 
     // The marketplace listing blurb. Pulled into the public directory by TigerVendors at the
     // pinned ref, so this file stays the one place this module's copy is translated.

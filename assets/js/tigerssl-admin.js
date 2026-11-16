@@ -28,20 +28,38 @@
         return '<span class="badge bg-' + (map[s] || 'secondary') + '">' + s + '</span>';
     }
 
+    // The screen renders ONE CSRF token (the add-domain form's); renew + remove post it back too — their
+    // form shares the salt server-side.
+    function csrf() {
+        var el = document.querySelector('#tigerssl-add-form [name="_csrf"]');
+        return el ? el.value : '';
+    }
+
+    function esc(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+    }
+
     var table = window.tigerDataTable && tigerDataTable('#tigerssl-certs', {
         service: { module: 'tigerssl', service: 'certificate', method: 'datatable' },
         order: [[0, 'asc']],
         columns: [
-            { data: 'domain' },
+            {
+                data: 'domain', render: function (d, t, row) {
+                    var extra = (row.names || []).filter(function (n) { return n !== d; });
+                    return esc(d) + (extra.length ? '<div class="small text-body-secondary">' + extra.map(esc).join(', ') + '</div>' : '');
+                }
+            },
             { data: 'status', render: function (d) { return statusPill(d); } },
             { data: 'expires_at', render: function (d) { return d ? d : '<span class="text-body-secondary">—</span>'; } },
             { data: 'auto_renew', render: function (d) { return d ? '<i class="fa-solid fa-check text-success"></i>' : '<i class="fa-solid fa-minus text-body-secondary"></i>'; } },
             { data: 'installer' },
             {
                 data: null, orderable: false, className: 'text-end', render: function (row) {
-                    var id = row.certificate_id;
-                    return '<button class="btn btn-sm btn-outline-secondary" data-renew="' + id + '" data-domain="' + row.domain + '"><i class="fa-solid fa-rotate"></i></button> ' +
-                           '<button class="btn btn-sm btn-outline-danger" data-remove="' + id + '"><i class="fa-solid fa-trash"></i></button>';
+                    var id = esc(row.certificate_id);
+                    return (row.can_edit ? '<button class="btn btn-sm btn-outline-secondary" data-renew="' + id + '"><i class="fa-solid fa-rotate"></i></button> ' : '') +
+                           (row.can_delete ? '<button class="btn btn-sm btn-outline-danger" data-remove="' + id + '"><i class="fa-solid fa-trash"></i></button>' : '');
                 }
             }
         ]
@@ -71,12 +89,19 @@
         var renew = e.target.closest && e.target.closest('[data-renew]');
         var remove = e.target.closest && e.target.closest('[data-remove]');
         if (renew) {
-            TigerButton.run(renew, function () { return post({ method: 'renew', domain: renew.getAttribute('data-domain') }); })
-                .then(function (res) { if (notify(res, 'Renewal started.') && table) { table.ajax.reload(null, false); } });
+            TigerButton.run(renew, function () { return post({ method: 'renew', certificate_id: renew.getAttribute('data-renew'), _csrf: csrf() }); })
+                .then(function (res) { if (notify(res, 'Certificate renewed.') && table) { table.ajax.reload(null, false); } });
         } else if (remove) {
-            if (!window.confirm('Remove this certificate from management? (The on-disk files are left in place.)')) { return; }
-            TigerButton.run(remove, function () { return post({ method: 'remove', certificate_id: remove.getAttribute('data-remove') }); })
-                .then(function (res) { if (notify(res, 'Removed.') && table) { table.ajax.reload(null, false); } });
+            TigerModal.confirm({
+                title: Tiger.t('removeTitle'),
+                body: Tiger.t('removeBody'),
+                confirmLabel: Tiger.t('removeConfirm'),
+                variant: 'danger'
+            }).then(function (ok) {
+                if (!ok) { return; }
+                TigerButton.run(remove, function () { return post({ method: 'remove', certificate_id: remove.getAttribute('data-remove'), _csrf: csrf() }); })
+                    .then(function (res) { if (notify(res, 'Removed.') && table) { table.ajax.reload(null, false); } });
+            });
         }
     });
 })();

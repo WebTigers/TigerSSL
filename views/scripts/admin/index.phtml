@@ -1,4 +1,11 @@
-<?php /* SPDX-License-Identifier: BSD-3-Clause — TigerSSL certificates screen (ADMIN.md skeleton). */ ?>
+<?php /* SPDX-License-Identifier: BSD-3-Clause — TigerSSL certificates screen (ADMIN.md skeleton). */
+// Localized strings the remove-confirm modal uses — delivered via the carrier + tiger.i18n.js, not inline.
+$this->i18n([
+    'removeTitle'   => 'tigerssl.js.remove_title',
+    'removeBody'    => 'tigerssl.js.remove_body',
+    'removeConfirm' => 'tigerssl.js.remove_confirm',
+]);
+?>
 <div class="d-flex align-items-center justify-content-between mb-4">
     <div>
         <h1 class="h3 mb-1"><i class="fa-solid fa-lock me-2"></i>SSL Certificates</h1>
@@ -43,7 +50,7 @@
         <table id="tigerssl-certs" class="table table-hover align-middle w-100">
             <thead>
                 <tr>
-                    <th>Domain</th><th>Status</th><th>Expires</th><th>Auto-renew</th><th>Installer</th><th class="text-end">Actions</th>
+                    <th>Domains</th><th>Status</th><th>Expires</th><th>Auto-renew</th><th>Installer</th><th class="text-end">Actions</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -70,7 +77,7 @@
           <div class="mb-2">
             <label class="form-label">Additional domains <span class="text-body-secondary">(optional)</span></label>
             <?= $this->form->getElement('sans') ?>
-            <div class="form-text">Extra names on the same certificate, comma or space separated.</div>
+            <div class="form-text">Extra names on the same certificate, comma or space separated. Every name must be one of this organization's site domains (or its <code>www.</code>).</div>
           </div>
         </div>
         <div class="modal-footer">
@@ -82,4 +89,4 @@
   </div>
 </div>
 
-<script src="<?= $this->escape($this->asset('/_modules/tigerssl/js/tigerssl-admin.js')) ?>" defer></script>
+<?php $this->pageScript('/_modules/tigerssl/js/tigerssl-admin.js', ['defer' => true]); ?>
