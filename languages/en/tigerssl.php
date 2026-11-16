@@ -24,6 +24,17 @@ return [
     'tigerssl.error.not_found'     => 'No managed certificate found for that domain.',
     'tigerssl.error.issue_failed'  => 'Certificate issuance failed. Check the domain points at this server and try staging first.',
     'tigerssl.error.renew_failed'  => 'Certificate renewal failed. The existing certificate keeps serving until its expiry.',
+    'tigerssl.error.no_org'           => 'Your account is not a member of an organization, so it has no certificates to manage.',
+    'tigerssl.error.name_not_owned'   => 'That domain does not belong to your organization. Add it to your sites first.',
+    'tigerssl.error.name_taken'       => 'That domain is already on another managed certificate.',
+    'tigerssl.error.san_invalid'      => 'Every additional domain must be a valid hostname.',
+    'tigerssl.error.too_many_names'   => 'A certificate can cover at most 100 domains.',
+    'tigerssl.error.install_settings' => 'Only the site owner\'s organization can change the server\'s SSL settings.',
+
+    // admin JS (delivered via the view's i18n carrier)
+    'tigerssl.js.remove_title'   => 'Remove certificate',
+    'tigerssl.js.remove_body'    => 'Remove this certificate from management? The on-disk files are left in place.',
+    'tigerssl.js.remove_confirm' => 'Remove',
 
     // The marketplace listing blurb. Pulled into the public directory by TigerVendors at the
     // pinned ref, so this file stays the one place this module's copy is translated.

@@ -124,15 +124,15 @@ only third-party dependency and it is pure PHP.
 
 ## 8. The certificate store
 
-One table, `tigerssl_certificate` (`Tigerssl_Model_Certificate`, standard columns + `$_primary =
-'certificate_id'`):
+Two tables. `tigerssl_certificate` (`Tigerssl_Model_Certificate`, standard columns + `$_primary =
+'certificate_id'`), one row per certificate, **owned by an org** (TIGER-511):
 
 | Column | Meaning |
 |---|---|
 | `certificate_id` | UUID PK |
-| `org_id` | scope owner (multi-tenant capable; global `''` for the platform host) |
-| `domain` | the primary domain (CN) |
-| `sans` | JSON array of extra SAN domains |
+| `org_id` | the owning org (legacy `''` rows were stamped to the install org in 1.1.0) |
+| `domain` | the primary domain (CN); unique per org among live rows (`domain_active`, active-only) |
+| `sans` | legacy JSON copy of the extra names — still written for a 1.0.x rollback, no longer read |
 | `challenge_type` | `http-01` \| `dns-01` |
 | `installer` | `sudo-hook` \| `write-only` \| `stand-down` |
 | `auto_renew` | `TINYINT(1)` |
@@ -142,6 +142,34 @@ One table, `tigerssl_certificate` (`Tigerssl_Model_Certificate`, standard column
 | `status` | `pending` \| `active` \| `expiring` \| `error` \| `disabled` |
 | `last_error` | populated by a failed issue/renew |
 | standard columns | `deleted`, `created_by`, `updated_by`, `created_at`, `updated_at` |
+
+`tigerssl_certificate_name` (`Tigerssl_Model_CertificateName`) holds the names a certificate covers — one
+row per hostname, the CN flagged `is_primary` — so a certificate is multi-domain (SAN) and a single-domain
+certificate is a list of one. A live name sits on one live certificate install-wide (`name_active`).
+
+### 8a. Per org, multi-domain — the org lane (TIGER-511)
+
+- **Every admin method acts for the caller's org only** — the grid, issue, renew, remove and the /api
+  `renewDue`. Writes go through org-scoped model methods (`updateForOrg`, `softDeleteForOrg`), so another
+  org's certificate id is "not found", never a write.
+- **An org may only certify names it owns** (`Tigerssl_Model_HostOwner`): a host mapped to it in core's
+  `site_domain` (any status), that host's `www.`, or — for the **install org** only — a host no tenant is
+  mapped to, which is exactly how core routes an unmapped host. A single-tenant install (no `site_domain`
+  rows) therefore keeps issuing for its own host; a tenant can't certify another org's host or an unmapped
+  one.
+- **The daily job** (`_renewAllDue`, TigerSchedule + `bin/tigerssl.php renew-due`) renews each due
+  certificate as its own org, for exactly its names — one order per certificate, never two orgs' names in
+  one order — and re-checks ownership first: a name that has moved to another org fails that renewal
+  instead of being certified. An org with auto-renew off is skipped.
+- **Settings split per key.** Org-level: `renew.auto` (written at the caller's org, global fallback).
+  Install-level, written globally and only by the install org: the CA environment, the ACME account
+  contact (one account per install — a per-org value would overwrite the shared account's contact), key
+  type, renewal window, installer strategy/path and the sudo reload command. The service reads
+  install-level keys from the global tier + ini only, never from an org row.
+- **Domain keys** live under `keys/<org>/` so a host that moves orgs never inherits the first org's key;
+  a pre-1.1 `keys/<domain>.key` is adopted by the install org.
+- The public **HTTP-01 responder** stays global and token-addressed: it returns only the
+  key-authorization for a currently pending token — no org, domain or certificate data.
 
 Account keys + issued private keys are **secrets** — stored on disk with `0600` outside the web root (or,
 for the account key, in the `local.ini`/secrets tier), **never** in the DB in plaintext.
@@ -201,7 +229,7 @@ Built per [ADMIN.md](ADMIN.md) — thin controller, `/api` mutations, PUMA admin
    sudoers entry; host-AutoSSL **stand-down** detection.
 4. **Renewal** — TigerSchedule job + `bin/tigerssl.php renew-due` + expiry-notice email.
 5. **DNS-01 + wildcards** — Route53 adapter first (TigerCloud is on AWS), pluggable like Tiger_Location.
-6. **Polish** — multi-SAN UX, chain viewer, per-org (multi-tenant) certs, store art.
+6. **Polish** — chain viewer, store art. (Per-org, multi-SAN certificates shipped in 1.1.0 — §8a.)
 
 ---
 

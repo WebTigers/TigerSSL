@@ -14,6 +14,22 @@
 
 <form id="tigerssl-settings-form" onsubmit="return false;" novalidate>
     <?= $this->form->getElement('_csrf') ?>
+    <?php if (empty($this->installScope)): ?>
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header fw-semibold"><i class="fa-solid fa-rotate me-2"></i>Renewal</div>
+                <div class="card-body">
+                    <div class="form-check">
+                        <?= $this->form->getElement('renew_auto') ?>
+                        <label class="form-check-label">Auto-renew this organization's certificates</label>
+                    </div>
+                    <div class="form-text">The certificate authority, key type and how certificates reach the web server are set by the site's owner.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php else: ?>
     <div class="row g-4">
         <div class="col-lg-6">
             <div class="card h-100">
@@ -71,6 +87,7 @@
             </div>
         </div>
     </div>
+    <?php endif; ?>
 </form>
 
-<script src="<?= $this->escape($this->asset('/_modules/tigerssl/js/tigerssl-settings.js')) ?>" defer></script>
+<?php $this->pageScript('/_modules/tigerssl/js/tigerssl-settings.js', ['defer' => true]); ?>

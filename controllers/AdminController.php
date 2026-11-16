@@ -6,6 +6,7 @@
  *
  * Thin by the ADMIN.md rule: it reads + renders; every mutation is an /api call
  * (Tigerssl_Service_Certificate / Tigerssl_Service_Settings). ACL-gated to admin+ (configs/acl.ini).
+ * The certificates grid is fetched over /api, scoped to the caller's org (TIGER-511).
  */
 class Tigerssl_AdminController extends Tiger_Controller_Admin_Action
 {
@@ -23,32 +24,37 @@ class Tigerssl_AdminController extends Tiger_Controller_Admin_Action
         $this->view->status        = (new Tigerssl_Service_Certificate())->_statusForView();
     }
 
-    /** Settings: CA environment, contact, key type, renewal window, installer strategy. */
+    /**
+     * Settings: the org's own choices (auto-renew) for everyone; the install-level settings (CA, key type,
+     * renewal window, installer) only for a member of the install's own org — the service enforces the
+     * same split.
+     */
     public function settingsAction()
     {
         $this->view->title = 'SSL Settings — Tiger Admin';
+        $install = Tiger_Model_Config::currentOrgId() === Tigerssl_Model_HostOwner::installOrgId();
         $form = new Tigerssl_Form_Settings();
         $form->populate($this->_currentConfig());
-        $this->view->form = $form;
+        $this->view->form         = $form;
+        $this->view->installScope = $install;
     }
 
-    /** Read the live tiger.tigerssl.* config, flattened to the settings form field names. */
+    /**
+     * The settings as the screen shows them: org keys at the caller's org (the tier the save writes),
+     * install keys at the install-wide tier (never an org row).
+     */
     protected function _currentConfig(): array
     {
-        $t = [];
-        if (Zend_Registry::isRegistered('Zend_Config')) {
-            $node = Zend_Registry::get('Zend_Config')->get('tiger')?->get('tigerssl');
-            if ($node) { $t = $node->toArray(); }
-        }
+        $g = fn(string $k, string $d) => (string) Tiger_Model_Config::orgValue('', 'tiger.tigerssl.' . $k, $d);
         return [
-            'ca_environment'    => $t['ca']['environment']      ?? 'staging',
-            'ca_contact_email'  => $t['ca']['contact_email']    ?? '',
-            'key_type'          => $t['key']['type']            ?? 'ec',
-            'renew_before_days' => $t['renew']['before_days']   ?? '30',
-            'renew_auto'        => (int) ($t['renew']['auto']   ?? 1),
-            'install_strategy'  => $t['install']['strategy']    ?? 'write-only',
-            'install_path'      => $t['install']['path']        ?? '/etc/tiger/ssl',
-            'reload_command'    => $t['install']['reload_command'] ?? '',
+            'ca_environment'    => $g('ca.environment', 'staging'),
+            'ca_contact_email'  => $g('ca.contact_email', ''),
+            'key_type'          => $g('key.type', 'ec'),
+            'renew_before_days' => $g('renew.before_days', '30'),
+            'renew_auto'        => (int) Tiger_Model_Config::currentValue('tiger.tigerssl.renew.auto', '1'),
+            'install_strategy'  => $g('install.strategy', 'write-only'),
+            'install_path'      => $g('install.path', '/etc/tiger/ssl'),
+            'reload_command'    => $g('install.reload_command', ''),
         ];
     }
 }

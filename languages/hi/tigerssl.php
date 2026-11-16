@@ -24,6 +24,17 @@ return [
     'tigerssl.error.not_found'     => 'उस डोमेन के लिए कोई प्रबंधित प्रमाणपत्र नहीं मिला।',
     'tigerssl.error.issue_failed'  => 'प्रमाणपत्र जारी करना विफल रहा। जांचें कि डोमेन इस सर्वर की ओर इंगित करता है और पहले staging आज़माएँ।',
     'tigerssl.error.renew_failed'  => 'प्रमाणपत्र नवीनीकरण विफल रहा। मौजूदा प्रमाणपत्र अपनी समाप्ति तक कार्य करता रहेगा।',
+    'tigerssl.error.no_org'           => 'आपका खाता किसी संगठन का सदस्य नहीं है, इसलिए प्रबंधित करने के लिए कोई प्रमाणपत्र नहीं है।',
+    'tigerssl.error.name_not_owned'   => 'यह डोमेन आपके संगठन का नहीं है। पहले इसे अपनी साइटों में जोड़ें।',
+    'tigerssl.error.name_taken'       => 'यह डोमेन पहले से किसी अन्य प्रबंधित प्रमाणपत्र पर है।',
+    'tigerssl.error.san_invalid'      => 'प्रत्येक अतिरिक्त डोमेन एक मान्य होस्टनाम होना चाहिए।',
+    'tigerssl.error.too_many_names'   => 'एक प्रमाणपत्र अधिकतम 100 डोमेन कवर कर सकता है।',
+    'tigerssl.error.install_settings' => 'केवल साइट के स्वामी का संगठन ही सर्वर की SSL सेटिंग्स बदल सकता है।',
+
+    // admin JS (delivered via the view's i18n carrier)
+    'tigerssl.js.remove_title'   => 'प्रमाणपत्र हटाएँ',
+    'tigerssl.js.remove_body'    => 'इस प्रमाणपत्र को प्रबंधन से हटाएँ? डिस्क पर फ़ाइलें बनी रहती हैं।',
+    'tigerssl.js.remove_confirm' => 'हटाएँ',
 
     // The marketplace listing blurb. Pulled into the public directory by TigerVendors at the
     // pinned ref, so this file stays the one place this module's copy is translated.
